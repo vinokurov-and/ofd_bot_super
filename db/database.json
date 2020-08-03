@@ -1,5 +1,5 @@
 {
-  "posts": [{ "id": 1, "title": "lowdb is awesome" }],
+  "kkts": [{ "id": 1, "title": "lowdb is awesome" }],
   "user": {
     "name": "typicode"
   },
