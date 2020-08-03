@@ -1,7 +1,6 @@
 const db = require("../db");
 const kkt = require("../sources/kktSource");
 
-console.log("1", db);
 const kktInstance = new kkt(db);
 
 const kktScenes = bot => {
@@ -14,7 +13,7 @@ const kktScenes = bot => {
 
   bot.onText(/\/kktRead (.+)/, async (msg, match) => {
     const chatId = msg.chat.id;
-    const result = await kktInstance.getPosts();
+    const result = await kktInstance.getKkts();
     bot.sendMessage(chatId, JSON.stringify(result));
   });
 };

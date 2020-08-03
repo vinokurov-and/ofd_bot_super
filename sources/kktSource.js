@@ -5,8 +5,11 @@ class KKTSource extends BaseDB {
     super(params);
     this.name = "kkts";
   }
-  getPosts() {
+  getKkts() {
     return this.getValue(this.name);
+  }
+  addKkt(kktModel) {
+    console.log(kktModel);
   }
 }
 

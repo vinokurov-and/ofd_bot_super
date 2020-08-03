@@ -12,7 +12,8 @@
   "dependencies": {
     "lowdb": "^1.0.0",
     "node-telegram-bot-api": "^0.50.0",
-    "socks5-https-client": "^1.2.1"
+    "socks5-https-client": "^1.2.1",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
