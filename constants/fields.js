@@ -32,7 +32,7 @@ const TYPE_PARAMS = {
     validator: (value) => new Validator(value).isDigit().fromToInclusive(1, 20).execute(),
   },
   numberFn: {
-    length: 'от 1 до 20 символов',
+    length: '16 символов',
     name: 'Заводской номер фискального накопителя',
     validator: (value) => new Validator(value).isDigit().fixedLength(16).execute(),
   },

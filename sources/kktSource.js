@@ -1,15 +1,15 @@
-const BaseDB = require("./baseSources");
+const BaseDB = require('./baseSources');
 
 class KKTSource extends BaseDB {
   constructor(params) {
     super(params);
-    this.name = "kkts";
+    this.name = 'kkts';
   }
   getKkts() {
     return this.getValue(this.name);
   }
-  addKkt(kktModel) {
-    console.log(kktModel);
+  addKkt(KKTModel) {
+    return this.push(this.name, KKTModel);
   }
 }
 

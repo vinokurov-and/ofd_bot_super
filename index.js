@@ -1,11 +1,11 @@
-const TelegramBot = require('node-telegram-bot-api')
-const Agent = require('socks5-https-client/lib/Agent')
-const ModifiedBot = require('./services/modifyBot')
-const { TOKEN } = require('./constants/settings')
-const { CANCEL_LABEL } = require('./constants/commands')
-const { START_KEYBOARD, CANCEL_KEYBOARD } = require('./constants/keyboard')
-const setScenes = require('./scenes/')
-const stepsScenes = require('./constants/steps')
+const TelegramBot = require('node-telegram-bot-api');
+const Agent = require('socks5-https-client/lib/Agent');
+const ModifiedBot = require('./services/modifyBot');
+const { TOKEN } = require('./constants/settings');
+const { CANCEL_LABEL } = require('./constants/commands');
+const { START_KEYBOARD, CANCEL_KEYBOARD } = require('./constants/keyboard');
+const setScenes = require('./scenes/');
+const stepsScenes = require('./constants/steps');
 
 const bot = new TelegramBot(TOKEN, {
   polling: true,
@@ -19,7 +19,7 @@ const bot = new TelegramBot(TOKEN, {
       // socksPassword: process.env.PROXY_SOCKS5_PASSWORD
     },
   },
-})
+});
 
 const modifiedBot = new ModifiedBot(
   bot,
@@ -29,5 +29,6 @@ const modifiedBot = new ModifiedBot(
     command: CANCEL_LABEL,
   },
   stepsScenes
-)
-setScenes(modifiedBot)
+);
+
+setScenes(modifiedBot);

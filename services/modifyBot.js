@@ -20,7 +20,7 @@ module.exports = class ModifiedBot {
 
     this.allScenes = allScenes;
 
-    bot.on('message', (msg) => {
+    bot.on('message', async (msg) => {
       const { users, original, allScenes, cancelCommand } = this;
 
       const chatId = msg.chat.id;
@@ -43,7 +43,8 @@ module.exports = class ModifiedBot {
           if (allSceneParams[nextStep]) {
             original.sendMessage(chatId, allSceneParams[nextStep].label);
           } else {
-            this.sendMessage(chatId, success(this.users[chatId]), this.startKeyboad);
+            const result = await success(this.users[chatId]);
+            this.sendMessage(chatId, result, this.startKeyboad);
             this.resetData(chatId);
           }
         }
@@ -53,8 +54,8 @@ module.exports = class ModifiedBot {
         // нажатие кнопки отмены сцены
         this.resetData(chatId);
       }
-      console.log(this.users);
     });
+
     this.replyText({
       command: this.cancelCommand,
       response: 'Действие отменено',
@@ -62,7 +63,7 @@ module.exports = class ModifiedBot {
     });
   }
 
-  setScene(chatId, scene, success, step = 0) {
+  setScene(chatId, scene, success, step) {
     this.users = {
       ...this.users,
       [chatId]: {
@@ -98,15 +99,15 @@ module.exports = class ModifiedBot {
     this.original.onText.call(this.original, new RegExp(command), callback);
   }
 
-  sendMessage(chatId, text, keyboard) {
+  sendMessage(chatId, text, keyboard, isInlineKeyboard) {
     this.original.sendMessage(chatId, text, {
       reply_markup: {
-        keyboard,
+        [isInlineKeyboard ? 'inline_keyboard' : 'keyboard']: keyboard,
       },
     });
   }
 
-  replyText({ command, response, keyboard = this.cancelKeyboard, scene, step, success }) {
+  replyText({ command, response, keyboard = this.cancelKeyboard, scene, /*step,*/ success, isInlineKeyboard }) {
     this.onText(command, async (msg) => {
       // отвечаем чуваку на его команду
       const chatId = msg.chat.id;
@@ -115,11 +116,12 @@ module.exports = class ModifiedBot {
       if (Array.isArray(response)) {
         textResponse = this.users[chatId] ? response[this.users[chatId].step].label : response[0].label;
       }
-      this.sendMessage(chatId, textResponse, keyboard);
+      let keyboardParam = typeof keyboard === 'function' ? await keyboard() : keyboard;
+      this.sendMessage(chatId, textResponse, keyboardParam, isInlineKeyboard);
 
       // устанавливаем сцену для юзера если она есть
-      scene && this.setScene(chatId, scene, success);
-      step && this.setStep(chatId, step);
+      scene && this.setScene(chatId, scene, success, 0);
+      // step && this.setStep(chatId, step);
     });
   }
 };

@@ -8,4 +8,10 @@ module.exports = class BaseDB {
       return data.get(name).value();
     });
   }
+
+  push(name, value) {
+    return this.db.then((data) => {
+      return data.get(name).push(value).write();
+    });
+  }
 };

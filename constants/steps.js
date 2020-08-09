@@ -9,10 +9,12 @@ const enterField = (fieldName) => ({
 
 const KKT_ADD = [
   enterField('nameOrg'),
-  // enterField('innOrg'),
+  enterField('innOrg'),
   // enterField('address'),
   // enterField('addressLocation'),
-  // enterField('regId'),
+  enterField('regId'),
+  enterField('numberKkt'),
+  enterField('numberFn'),
 ];
 
 module.exports = {

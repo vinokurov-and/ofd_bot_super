@@ -1,5 +1,45 @@
 {
-  "kkts": [{ "id": 1, "title": "lowdb is awesome" }],
+  "kkts": [
+    {
+      "nameOrg": "321321",
+      "id": "64f94345-9081-4403-9ac8-eb7635758647",
+      "numberKkt": "касса 1"
+    },
+    {
+      "nameOrg": "3123123123",
+      "id": "762200b9-e7cf-4723-90ff-6d01f7336789",
+      "numberKkt": "касса 2"
+    },
+    {
+      "nameOrg": "3213321",
+      "id": "a22228b5-674e-4440-8525-1b9d1cf573a8",
+      "numberKkt": "касса 3"
+    },
+    {
+      "nameOrg": "касса",
+      "innOrg": "1234567890",
+      "address": "123123",
+      "numberKkt": "asasa",
+      "addressLocation": "31231",
+      "regId": "1234567890123456",
+      "id": "295d3d3c-766d-4f36-84b5-00a278a2c892"
+    },
+    {
+      "nameOrg": "123123",
+      "innOrg": "1234567890",
+      "numberKkt": "32323323",
+      "numberFn": "1234567890123456",
+      "id": "9b78ae90-ed55-4a2a-8256-4ba2de06bd58"
+    },
+    {
+      "nameOrg": "123123",
+      "innOrg": "1234567890",
+      "regId": "4444444444444444",
+      "numberKkt": "893333",
+      "numberFn": "3213123123312312",
+      "id": "3d41bfc0-eb43-4f79-a90a-03e48ae424fe"
+    }
+  ],
   "user": {
     "name": "typicode"
   },
