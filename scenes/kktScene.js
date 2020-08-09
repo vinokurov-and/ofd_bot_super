@@ -52,8 +52,9 @@ const kktScenes = (bot) => {
     const selectKkt = allKkts.find((kkt) => kkt.id === data);
     if (selectKkt) {
       // присваиваим сцену
-      bot.setScene(chat.id, 'KKT_CONTROL');
-      bot.addData(chat.id, { kkt: data });
+      // пока отключаем сцену, т.к. нет её реализации
+      // bot.setScene(chat.id, 'KKT_CONTROL');
+      // bot.addData(chat.id, { kkt: data });
       bot.sendMessage(chat.id, `Вы выбрали кассу ${selectKkt.numberKkt}`, [
         ...KKT_GENERATE_JSON_KEYBOARD,
         ...CANCEL_KEYBOARD,

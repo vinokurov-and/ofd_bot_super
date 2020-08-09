@@ -31,6 +31,7 @@ module.exports = class ModifiedBot {
 
       if (currentScene && !isCancelCommand) {
         const { step, nextStep = step + 1, success = notFoundSuccess } = users[chatId];
+        console.log(this.users);
         const { field: { validator } = { validator: notFoundValidation } } = allSceneParams[step];
         const validateError = validator(msg.text);
 
