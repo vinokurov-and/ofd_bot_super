@@ -1,6 +1,6 @@
 const { identicalCommands } = require('../utils/common');
 
-енаconst notFoundSuccess = () => {
+const notFoundSuccess = () => {
   const NOT_FOUND_SUCCESS = 'Не найден success';
   console.error(NOT_FOUND_SUCCESS);
   return NOT_FOUND_SUCCESS;
