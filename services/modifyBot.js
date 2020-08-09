@@ -1,5 +1,14 @@
 const { identicalCommands } = require('../utils/common');
 
+енаconst notFoundSuccess = () => {
+  const NOT_FOUND_SUCCESS = 'Не найден success';
+  console.error(NOT_FOUND_SUCCESS);
+  return NOT_FOUND_SUCCESS;
+};
+const notFoundValidation = () => {
+  console.log('Без валидации');
+};
+
 module.exports = class ModifiedBot {
   constructor(bot, startKeyboard, cancel, allScenes) {
     this.original = bot;
@@ -16,19 +25,35 @@ module.exports = class ModifiedBot {
 
       const chatId = msg.chat.id;
       const currentScene = users[chatId] && users[chatId].scene;
-      const sceneParams = allScenes[currentScene];
+      const allSceneParams = allScenes[currentScene];
 
-      if (currentScene && !identicalCommands(msg.text, cancelCommand)) {
-        const { step, nextStep = step + 1 } = users[chatId];
-        const validateError = sceneParams[step].field.validator && sceneParams[step].field.validator(msg.text);
-        console.log(validateError)
+      const isCancelCommand = identicalCommands(msg.text, cancelCommand);
+
+      if (currentScene && !isCancelCommand) {
+        const { step, nextStep = step + 1, success = notFoundSuccess } = users[chatId];
+        const { field: { validator } = { validator: notFoundValidation } } = allSceneParams[step];
+        const validateError = validator(msg.text);
+
         if (validateError) {
           original.sendMessage(chatId, validateError);
         } else {
           this.users[chatId].step += 1;
-          original.sendMessage(chatId, sceneParams[nextStep].label);
+          this.addData(chatId, { [allSceneParams[step].id]: msg.text });
+          // продолжаем сцену, либо завершаем её если она закончилась
+          if (allSceneParams[nextStep]) {
+            original.sendMessage(chatId, allSceneParams[nextStep].label);
+          } else {
+            this.sendMessage(chatId, success(this.users[chatId]), this.startKeyboad);
+            this.resetData(chatId);
+          }
         }
       }
+
+      if (isCancelCommand) {
+        // нажатие кнопки отмены сцены
+        this.resetData(chatId);
+      }
+      console.log(this.users);
     });
     this.replyText({
       command: this.cancelCommand,
@@ -37,12 +62,14 @@ module.exports = class ModifiedBot {
     });
   }
 
-  setScene(chatId, scene, step = 0) {
+  setScene(chatId, scene, success, step = 0) {
     this.users = {
       ...this.users,
       [chatId]: {
         scene,
         step,
+        data: {},
+        success,
       },
     };
   }
@@ -57,28 +84,41 @@ module.exports = class ModifiedBot {
     };
   }
 
+  resetData(chatId) {
+    if (this.users[chatId]) {
+      delete this.users[chatId];
+    }
+  }
+
+  addData(chatId, value) {
+    this.users[chatId].data = { ...this.users[chatId].data, ...value };
+  }
+
   onText(command, callback) {
     this.original.onText.call(this.original, new RegExp(command), callback);
   }
 
-  replyText({ command, response, keyboard = this.cancelKeyboard, scene, step }) {
+  sendMessage(chatId, text, keyboard) {
+    this.original.sendMessage(chatId, text, {
+      reply_markup: {
+        keyboard,
+      },
+    });
+  }
+
+  replyText({ command, response, keyboard = this.cancelKeyboard, scene, step, success }) {
     this.onText(command, async (msg) => {
       // отвечаем чуваку на его команду
       const chatId = msg.chat.id;
 
       let textResponse = response;
-      console.log(response);
       if (Array.isArray(response)) {
         textResponse = this.users[chatId] ? response[this.users[chatId].step].label : response[0].label;
       }
-      this.original.sendMessage(chatId, textResponse, {
-        reply_markup: {
-          keyboard,
-        },
-      });
+      this.sendMessage(chatId, textResponse, keyboard);
 
       // устанавливаем сцену для юзера если она есть
-      scene && this.setScene(chatId, scene);
+      scene && this.setScene(chatId, scene, success);
       step && this.setStep(chatId, step);
     });
   }

@@ -1,14 +1,18 @@
 const { getLabelEnterType } = require('../utils/common');
-const { nameOrg, innOrg, address, regId, addressLocation } = require('./typeParams');
+const fields = require('./fields');
 
-const enterField = (field) => ({ field, label: getLabelEnterType(field) });
+const enterField = (fieldName) => ({
+  id: fieldName,
+  field: fields[fieldName],
+  label: getLabelEnterType(fields[fieldName]),
+});
 
 const KKT_ADD = [
-  enterField(nameOrg),
-  enterField(innOrg),
-  enterField(address),
-  enterField(addressLocation),
-  enterField(regId),
+  enterField('nameOrg'),
+  // enterField('innOrg'),
+  // enterField('address'),
+  // enterField('addressLocation'),
+  // enterField('regId'),
 ];
 
 module.exports = {

@@ -38,6 +38,13 @@ module.exports = class Validator {
     return this;
   }
 
+  fromToInclusive(from, to) {
+    if (this.length < from || this.length > to) {
+      this.addError(`от ${from} до ${to} симв.`);
+    }
+    return this;
+  }
+
   execute() {
     if (this.result.length) {
       let text = 'Значение должно быть: \n';

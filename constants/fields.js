@@ -26,6 +26,16 @@ const TYPE_PARAMS = {
     name: 'Регистрационный номер ККТ',
     validator: (value) => new Validator(value).fixedLength(16).execute(),
   },
+  numberKkt: {
+    length: 'от 1 до 20 символов',
+    name: 'Заводской номер ККТ',
+    validator: (value) => new Validator(value).isDigit().fromToInclusive(1, 20).execute(),
+  },
+  numberFn: {
+    length: 'от 1 до 20 символов',
+    name: 'Заводской номер фискального накопителя',
+    validator: (value) => new Validator(value).isDigit().fixedLength(16).execute(),
+  },
 };
 
 module.exports = TYPE_PARAMS;
