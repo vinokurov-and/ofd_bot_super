@@ -10,6 +10,7 @@ const enterField = (fieldName) => ({
 const KKT_ADD = [
   enterField('nameOrg'),
   enterField('innOrg'),
+  // убрал чтобы быстрее добавлять ккт
   // enterField('address'),
   // enterField('addressLocation'),
   enterField('regId'),
