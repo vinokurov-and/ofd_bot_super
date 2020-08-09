@@ -1,20 +1,30 @@
 const Validator = require('../services/validator');
-const ValidatorInstance = new Validator();
 
 const TYPE_PARAMS = {
   nameOrg: {
     length: 'до 128 символов',
     name: 'Наименование организации',
-    validator: ValidatorInstance.isMaxLength(128).execute,
+    validator: (value) => new Validator(value).isMaxLength(128).execute(),
   },
   innOrg: {
     length: '10 или 12 символов',
     name: 'ИНН организации',
-    validator: ValidatorInstance.fixedLength([10, 12]).execute,
+    validator: (value) => new Validator(value).fixedLength([10, 12]).isDigit().execute(),
   },
   address: {
     length: 'до 256 символов',
-    name: 'Адрес устрановки',
+    name: 'Адрес установки',
+    validator: (value) => new Validator(value).isMaxLength(256).execute(),
+  },
+  addressLocation: {
+    length: 'до 256 символов',
+    name: 'Место установки ККТ',
+    validator: (value) => new Validator(value).isMaxLength(256).execute(),
+  },
+  regId: {
+    length: '16 символов',
+    name: 'Регистрационный номер ККТ',
+    validator: (value) => new Validator(value).fixedLength(16).execute(),
   },
 };
 

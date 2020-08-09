@@ -1,6 +1,7 @@
 module.exports = class Validator {
   constructor(value) {
     this.value = value;
+    this.length = this.value.length;
     this.result = [];
   }
 
@@ -9,20 +10,31 @@ module.exports = class Validator {
   }
 
   isMaxLength(maxLength) {
-    if (this.value) this.addError(`больше ${maxLength} симв.`);
+    if (this.length > maxLength) this.addError(`не больше ${maxLength} симв.`);
+    return this;
+  }
+
+  isDigit() {
+    if (/^\d+$/.test(this.value)) return this;
+    this.addError('состоять из цифр');
     return this;
   }
 
   fixedLength(lengthValues) {
+    const isArray = Array.isArray(lengthValues);
+    if ((isArray && lengthValues.includes(this.length)) || this.length.toString() === lengthValues.toString())
+      return this;
+
     let text = 'только';
-    if (Array.isArray(lengthValues)) {
+    if (isArray) {
       lengthValues.forEach((value) => {
         text += ` ${value};`;
       });
     } else {
-      text += ` ${value}`;
+      text += ` ${lengthValues}`;
     }
     this.addError(`${text} симв.`);
+
     return this;
   }
 

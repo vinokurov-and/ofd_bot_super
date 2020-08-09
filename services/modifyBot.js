@@ -1,3 +1,5 @@
+const { identicalCommands } = require('../utils/common');
+
 module.exports = class ModifiedBot {
   constructor(bot, startKeyboard, cancel, allScenes) {
     this.original = bot;
@@ -10,27 +12,24 @@ module.exports = class ModifiedBot {
     this.allScenes = allScenes;
 
     bot.on('message', (msg) => {
-      const { users, original, allScenes } = this;
-      const chatId = msg.chat.id;
+      const { users, original, allScenes, cancelCommand } = this;
 
-      if (
-        users[chatId] &&
-        users[chatId].scene &&
-        msg.text.toString().toLowerCase().indexOf(this.cancelCommand.toLowerCase()) !== 0
-      ) {
-        const { step, scene, nextStep = step + 1 } = users[chatId];
-        console.log(users[chatId]);
-        console.log(allScenes[scene][step]);
-        const validateError = allScenes[scene][step].validate && allScenes[scene][step].validate(msg.text);
+      const chatId = msg.chat.id;
+      const currentScene = users[chatId] && users[chatId].scene;
+      const sceneParams = allScenes[currentScene];
+
+      if (currentScene && !identicalCommands(msg.text, cancelCommand)) {
+        const { step, nextStep = step + 1 } = users[chatId];
+        const validateError = sceneParams[step].field.validator && sceneParams[step].field.validator(msg.text);
+        console.log(validateError)
         if (validateError) {
           original.sendMessage(chatId, validateError);
         } else {
           this.users[chatId].step += 1;
-          original.sendMessage(chatId, allScenes[users[chatId].scene][nextStep].label);
+          original.sendMessage(chatId, sceneParams[nextStep].label);
         }
       }
     });
-    console.log('123312312');
     this.replyText({
       command: this.cancelCommand,
       response: 'Действие отменено',
@@ -49,7 +48,6 @@ module.exports = class ModifiedBot {
   }
 
   setStep(chatId, step) {
-    console.log('AAAAAAAAAAAAAAAAAA');
     this.users = {
       ...this.users,
       [chatId]: {
@@ -57,8 +55,6 @@ module.exports = class ModifiedBot {
         step,
       },
     };
-    console.log('BBBBBBBBBBBBBB');
-    console.log(this.users);
   }
 
   onText(command, callback) {
